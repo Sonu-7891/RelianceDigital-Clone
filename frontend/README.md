@@ -1,61 +1,90 @@
 # Reliance Digital Clone - Frontend
 
-This is the frontend part of the Reliance Digital clone project, built with React, Material-UI, and Vite.
+This is the frontend application for the Reliance Digital Clone project, built with React, Material-UI, and Redux.
 
-## Features
+## 🚀 Features
 
-- 🛍️ Product browsing with filters and search
-- 🔍 Advanced search functionality
-- 🛒 Shopping cart management
-- 👤 User authentication
-- 📱 Responsive design
-- 🎨 Modern UI with Material-UI
+- Modern, responsive UI design
+- Product browsing with advanced filtering
+- Category-based product navigation
+- Product search functionality
+- Product comparison
+- Shopping cart management
+- User authentication
+- Order tracking
+- Wishlist functionality
+- Responsive design for all devices
 
-## Prerequisites
+## 📋 Prerequisites
 
 - Node.js (v14 or higher)
 - npm or yarn
-- Backend API running (see backend README)
+- Backend server running (see Backend README)
 
-## Getting Started
+## 🛠️ Installation
 
 1. Clone the repository:
+
 ```bash
-git clone <repository-url>
-cd frontend
+git clone https://github.com/Sonu-7891/RelianceDigital-Clone.git
+cd RelianceDigital-Clone/frontend
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
-3. Create a `.env` file in the root directory and add the following:
-```
+3. Create a `.env` file in the root directory:
+
+```env
 VITE_API_URL=http://localhost:5000/api
 ```
 
 4. Start the development server:
+
 ```bash
 npm run dev
 ```
 
-The application will be available at `http://localhost:5173`
-
-## Project Structure
+## 🏗️ Project Structure
 
 ```
-src/
-├── components/         # Reusable components
-├── pages/             # Page components
-├── contexts/          # React contexts
-├── services/          # API services
-├── routes/            # Route components
-├── App.jsx           # Main App component
-└── main.jsx          # Entry point
+frontend/
+├── public/          # Static files
+├── src/
+│   ├── components/  # Reusable components
+│   ├── pages/       # Page components
+│   ├── services/    # API services
+│   ├── store/       # Redux store
+│   ├── utils/       # Utility functions
+│   ├── App.jsx      # Main App component
+│   └── main.jsx     # Entry point
+├── package.json
+└── vite.config.js
 ```
 
-## Available Scripts
+## 🎨 UI Components
+
+### Layout Components
+
+- `Navbar` - Main navigation bar
+- `Footer` - Site footer
+- `Sidebar` - Category navigation
+- `ProductCard` - Product display card
+- `FilterSection` - Product filtering
+
+### Feature Components
+
+- `ProductGrid` - Product listing
+- `ProductDetail` - Product information
+- `Cart` - Shopping cart
+- `Wishlist` - User wishlist
+- `Compare` - Product comparison
+- `SearchBar` - Product search
+
+## 🔧 Available Scripts
 
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
@@ -63,14 +92,73 @@ src/
 - `npm run lint` - Run ESLint
 - `npm run format` - Format code with Prettier
 
-## Contributing
+## 📱 Responsive Design
+
+The application is fully responsive and optimized for:
+
+- Desktop (1920px and below)
+- Tablet (1024px and below)
+- Mobile (768px and below)
+
+## 🎯 Key Features Implementation
+
+### Product Filtering
+
+- Category-based filtering
+- Price range filtering
+- Brand filtering
+- Discount filtering
+- Search by name
+
+### Product Display
+
+- Grid/List view toggle
+- Product cards with:
+  - Product image
+  - Name
+  - Price
+  - Discount
+  - MRP
+  - Compare button
+  - Wishlist button
+
+### Shopping Experience
+
+- Add to cart
+- Add to wishlist
+- Compare products
+- Quick view
+- Product details
+
+## 🛠️ Tech Stack
+
+- React.js
+- Material-UI
+- Redux Toolkit
+- React Router
+- Axios
+- Vite
+- ESLint
+- Prettier
+
+## 🤝 Contributing
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## License
+## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 👥 Authors
+
+- Your Name - Initial work
+
+## 🙏 Acknowledgments
+
+- Reliance Digital for inspiration
+- Material-UI for the component library
+- All contributors who have helped shape this project
