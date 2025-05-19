@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -11,12 +11,19 @@ import {
   Chip,
   Grid,
 } from "@mui/material";
-import { FavoriteOutlined } from "@mui/icons-material";
+import { FavoriteOutlined, Favorite } from "@mui/icons-material";
+import {
+  getWishlist,
+  addToWishlist,
+  removeFromWishlist,
+} from "../services/wishListService";
+import { useAuth } from "../contexts/AuthContext";
 
-const ProductCard = memo(({ product }) => {
+const ProductCard = memo(({ product, isInWishlist, onWishlistToggle }) => {
   const navigate = useNavigate();
   const [imageError, setImageError] = useState(false);
-  const fallbackImage = "https://via.placeholder.com/200x200?text=No+Image";
+  const fallbackImage =
+    "https://placehold.co/200x200/e2e8f0/1e293b?text=No+Image";
 
   // Calculate discount percentage
   const discount = product.mrp
@@ -25,6 +32,11 @@ const ProductCard = memo(({ product }) => {
 
   const handleCardClick = () => {
     navigate(`/product/${product._id}`);
+  };
+
+  const handleWishlistClick = (e) => {
+    e.stopPropagation(); // Prevent card click when clicking heart
+    onWishlistToggle(product._id);
   };
 
   return (
@@ -84,15 +96,19 @@ const ProductCard = memo(({ product }) => {
         />
       )}
       <IconButton
+        onClick={handleWishlistClick}
         sx={{
           position: "absolute",
           top: 8,
           right: 8,
-          color: "#bbb",
+          color: isInWishlist ? "#ff4081" : "#bbb",
           zIndex: 2,
+          "&:hover": {
+            color: isInWishlist ? "#ff4081" : "#ff4081",
+          },
         }}
       >
-        <FavoriteOutlined />
+        {isInWishlist ? <Favorite /> : <FavoriteOutlined />}
       </IconButton>
       <CardMedia
         component="img"
@@ -103,7 +119,14 @@ const ProductCard = memo(({ product }) => {
         }
         alt={product.name}
         onError={() => setImageError(true)}
-        sx={{ width: "100%", height: 200, objectFit: "contain", mt: 4, mb: 1 }}
+        sx={{
+          width: "100%",
+          height: 200,
+          objectFit: "contain",
+          mt: 4,
+          mb: 1,
+          bgcolor: "#f8fafc",
+        }}
       />
       <CardContent sx={{ flex: 1, width: "100%", p: 2, pt: 0 }}>
         <Typography
@@ -147,6 +170,63 @@ const ProductCard = memo(({ product }) => {
 const ProductSection = memo(
   ({ title, subtitle, products, bgcolor = "#c3e3f0" }) => {
     const navigate = useNavigate();
+    const { user } = useAuth();
+    const [wishlistProducts, setWishlistProducts] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+      const fetchWishlist = async () => {
+        if (!user) {
+          setWishlistProducts([]);
+          return;
+        }
+
+        setIsLoading(true);
+        try {
+          const wishlist = await getWishlist();
+          // Ensure wishlist is an array
+          setWishlistProducts(Array.isArray(wishlist) ? wishlist : []);
+        } catch (error) {
+          console.error("Error fetching wishlist:", error);
+          setWishlistProducts([]);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchWishlist();
+    }, [user]);
+
+    const handleWishlistToggle = async (productId) => {
+      if (!user) {
+        navigate("/login");
+        return;
+      }
+
+      try {
+        const isInWishlist =
+          Array.isArray(wishlistProducts) &&
+          wishlistProducts.some((p) => p._id === productId);
+
+        if (isInWishlist) {
+          await removeFromWishlist(productId);
+          setWishlistProducts((prev) =>
+            Array.isArray(prev) ? prev.filter((p) => p._id !== productId) : []
+          );
+        } else {
+          await addToWishlist(productId);
+          const product = products.find((p) => p._id === productId);
+          if (product) {
+            setWishlistProducts((prev) =>
+              Array.isArray(prev) ? [...prev, product] : [product]
+            );
+          }
+        }
+      } catch (error) {
+        console.error("Error toggling wishlist:", error);
+      }
+    };
+
     // Try to infer category name from the first product
     const categoryName =
       products &&
@@ -155,6 +235,7 @@ const ProductSection = memo(
       (typeof products[0].category === "string"
         ? products[0].category
         : products[0].category.name);
+
     return (
       <Box
         sx={{
@@ -230,7 +311,15 @@ const ProductSection = memo(
         >
           {products &&
             products.map((product) => (
-              <ProductCard key={product._id} product={product} />
+              <ProductCard
+                key={product._id}
+                product={product}
+                isInWishlist={
+                  Array.isArray(wishlistProducts) &&
+                  wishlistProducts.some((p) => p._id === product._id)
+                }
+                onWishlistToggle={handleWishlistToggle}
+              />
             ))}
         </Box>
       </Box>

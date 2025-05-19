@@ -25,7 +25,6 @@ This is the backend server for the Reliance Digital Clone project, built with No
 
 ```bash
 git clone https://github.com/Sonu-7891/RelianceDigital-Clone.git
-cd RelianceDigital-Clone/Backend
 ```
 
 2. Install dependencies:

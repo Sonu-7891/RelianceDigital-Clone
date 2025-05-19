@@ -8,6 +8,7 @@ const hpp = require("hpp");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const errorHandler = require("./middleware/error.middleware");
+const cookieParser = require("cookie-parser");
 
 // Load env vars
 dotenv.config();
@@ -19,6 +20,7 @@ const app = express();
 
 // Body parser
 app.use(express.json());
+app.use(cookieParser());
 
 // Dev logging middleware
 if (process.env.NODE_ENV === "development") {
@@ -46,8 +48,6 @@ app.use(
   cors({
     origin: "http://localhost:5173",
     credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization", "Cache-Control"],
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   })
 );
 
@@ -74,3 +74,5 @@ process.on("unhandledRejection", (err, promise) => {
   // Close server & exit process
   server.close(() => process.exit(1));
 });
+
+module.exports = app;

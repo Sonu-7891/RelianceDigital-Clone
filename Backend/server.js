@@ -7,6 +7,7 @@ const productRoutes = require("./routes/product.routes");
 const cartRoutes = require("./routes/cart.routes");
 const orderRoutes = require("./routes/order.routes");
 const adminRoutes = require("./routes/admin.routes");
+const wishlistRoutes = require("./routes/wishlist.route");
 const errorHandler = require("./middleware/error.middleware");
 
 dotenv.config();
@@ -17,7 +18,8 @@ const app = express();
 const corsOptions = {
   origin:
     process.env.FRONTEND_URL ||
-    "https://reliance-digital-clone-e5kj.vercel.app/", // Vite's default port
+    "https://reliance-digital-clone-e5kj.vercel.app/" ||
+    "http://localhost:5173", // Vite's default port
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -34,6 +36,8 @@ app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/order", orderRoutes);
 app.use("/api/admin", adminRoutes);
+
+app.use("/api/wishlist", wishlistRoutes);
 
 // Error handling middleware
 app.use(errorHandler);
